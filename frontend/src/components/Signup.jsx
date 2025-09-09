@@ -47,11 +47,11 @@ export default function Signup({ setPage, setUser }) {
       <div className="mt-8 w-full max-w-xl px-4">
         <div className="bg-white/90 backdrop-blur rounded-xl border border-green-100 shadow-md overflow-hidden">
           <div className="px-6 pt-5">
-            <h2 className="text-xl font-semibold text-gray-900">Welcome, Farmer!</h2>
-            <p className="text-sm text-gray-500 mb-4">Login or create your account to get started</p>
-            <div className="grid grid-cols-2 gap-2 bg-gray-100 p-1 rounded-full w-full sm:w-80">
+            <h2 className="text-2xl font-bold text-gray-900 flex justify-center align-middle">Welcome, Farmer!</h2>
+            <p className="text-sm text-gray-500 mb-4 flex justify-center align-middle">Login or create your account to get started</p>
+            <div className="grid grid-cols-2 gap-2 bg-gray-100 p-1 rounded-full w-full sm:w-80 mx-auto">
               <button
-                className={`py-2 rounded-full text-sm font-medium ${mode === "login" ? "bg-white shadow text-gray-900" : "text-gray-600"}`}
+                className={`py-2 rounded-full text-sm font-medium  ${mode === "login" ? "bg-white shadow text-gray-900" : "text-gray-600"}`}
                 onClick={() => setMode("login")}
               >
                 Login
@@ -94,7 +94,7 @@ export default function Signup({ setPage, setUser }) {
               </div>
               <button
                 onClick={login}
-                className={`mt-4 w-full py-2 rounded-md text-white font-semibold ${validPhone ? "bg-green-600 hover:bg-green-700" : "bg-green-300 cursor-not-allowed"}`}
+                className={`mt-4 w-full sm:w-80 mx-auto block py-2 rounded-md text-white font-semibold ${validPhone ? "bg-green-600 hover:bg-green-700" : "bg-green-300 cursor-not-allowed"}`}
                 disabled={!validPhone}
               >
                 Login
@@ -102,7 +102,7 @@ export default function Signup({ setPage, setUser }) {
               <button
                 type="button"
                 onClick={() => setPage("home")}
-                className="mt-3 w-full py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+                className="mt-3 w-full sm:w-80 mx-auto block py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
               >
                 Back
               </button>
@@ -114,7 +114,7 @@ export default function Signup({ setPage, setUser }) {
                   <label className="block text-sm text-gray-700 mb-1">Full Name</label>
                   <input
                     type="text"
-                    placeholder="e.g., Ramesh Kumar"
+                    placeholder="Enter your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -125,9 +125,52 @@ export default function Signup({ setPage, setUser }) {
                   <input
                     type="tel"
                     inputMode="numeric"
-                    placeholder="10 digits"
+                    placeholder="10 digit number"
                     value={number}
                     onChange={(e) => setNumber(e.target.value.replace(/[^\d]/g, ""))}
+                    className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-700 mb-1">Preferred Language</label>
+                  <select className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" defaultValue="ml">
+                    <option value="ml">മലയാളം (Malayalam)</option>
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-700 mb-1">Location</label>
+                  <input
+                    type="text"
+                    placeholder="Village/District"
+                    className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-700 mb-1">Soil Type</label>
+                  <select className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500" defaultValue="Loamy">
+                    <option>Loamy</option>
+                    <option>Clay</option>
+                    <option>Sandy</option>
+                    <option>Silty</option>
+                    <option>Peaty</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-700 mb-1">Farm Size (in acres)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., 2.5"
+                    className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <div className="relative">
+                  <label className="block text-sm text-gray-700 mb-1">Main Crops</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Paddy, Banana, Coconut"
                     className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
@@ -151,14 +194,14 @@ export default function Signup({ setPage, setUser }) {
               </div>
               <button
                 type="submit"
-                className="mt-4 w-full py-2 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700"
+                className="mt-4 w-full sm:w-80 mx-auto block py-2 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700"
               >
-                Create Account
+                Register
               </button>
               <button
                 type="button"
                 onClick={() => setPage("home")}
-                className="mt-3 w-full py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+                className="mt-3 w-full sm:w-80 mx-auto block py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
               >
                 Back
               </button>
