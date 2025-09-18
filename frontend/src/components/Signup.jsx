@@ -6,16 +6,42 @@ export default function Signup({ setPage, setUser }) {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  // OTP state
   const [otpSent, setOtpSent] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [otpInput, setOtpInput] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
 
   const validPhone = /^\d{10}$/.test(number);
 
+  const sendOtp = () => {
+    setError("");
+    if (!validPhone) return setError("Enter a valid 10 digit number.");
+    const code = String(Math.floor(100000 + Math.random() * 900000)); // demo OTP
+    setGeneratedOtp(code);
+    setOtpSent(true);
+    setOtpVerified(false);
+    setOtpInput("");
+    setInfo(`OTP sent to ${number}. Demo OTP: ${code}`);
+  };
+
+  const verifyOtp = () => {
+    setError("");
+    if (!otpSent) return setError("Please request an OTP first.");
+    if (otpInput.trim().length !== 6) return setError("Enter the 6-digit OTP.");
+    if (otpInput.trim() !== generatedOtp) return setError("Incorrect OTP. Try again or resend.");
+    setOtpVerified(true);
+    setInfo("OTP verified ✅");
+  };
+
   const login = () => {
-    if (!validPhone) {
-      setError("Enter a valid 10 digit number.");
-      return;
-    }
+    setError("");
+    if (!validPhone) return setError("Enter a valid 10 digit number.");
+    if (!otpVerified) return setError("Please verify OTP before logging in.");
     const newUser = { name: name || "Farmer", number };
     localStorage.setItem("krishi_user", JSON.stringify(newUser));
     setUser(newUser);
@@ -80,22 +106,54 @@ export default function Signup({ setPage, setUser }) {
                   inputMode="numeric"
                   placeholder="Enter 10 digit number"
                   value={number}
-                  onChange={(e) => setNumber(e.target.value.replace(/[^\d]/g, ""))}
+                  onChange={(e) => {
+                    const v = e.target.value.replace(/[^\d]/g, "");
+                    setNumber(v);
+                    setOtpSent(false);
+                    setOtpVerified(false);
+                    setOtpInput("");
+                    setGeneratedOtp("");
+                  }}
                   className="flex-1 border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <button
                   type="button"
                   disabled={!validPhone}
-                  onClick={() => setOtpSent(true)}
+                  onClick={sendOtp}
                   className={`px-4 rounded-md ${validPhone ? "bg-amber-300 hover:bg-amber-400" : "bg-amber-200 cursor-not-allowed"}`}
                 >
-                  {otpSent ? "OTP Sent" : "Send OTP"}
+                  {otpSent ? "Resend" : "Send OTP"}
                 </button>
               </div>
+              {otpSent && (
+                <div className="mt-3 flex gap-2">
+                  <input
+                    type="tel"
+                    inputMode="numeric"
+                    placeholder="Enter 6-digit OTP"
+                    value={otpInput}
+                    onChange={(e) => setOtpInput(e.target.value.replace(/[^\d]/g, "").slice(0, 6))}
+                    className="flex-1 border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={verifyOtp}
+                    className={`px-4 rounded-md ${otpInput.length === 6 ? "bg-green-600 text-white hover:bg-green-700" : "bg-green-300 text-white cursor-not-allowed"}`}
+                    disabled={otpInput.length !== 6}
+                  >
+                    {otpVerified ? "Verified" : "Verify"}
+                  </button>
+                </div>
+              )}
+              {otpSent && (
+                <div className="mt-1 text-xs text-gray-600">
+                  Demo OTP: <span className="font-mono tracking-wider">{generatedOtp}</span>
+                </div>
+              )}
               <button
                 onClick={login}
-                className={`mt-4 w-full sm:w-80 mx-auto block py-2 rounded-md text-white font-semibold ${validPhone ? "bg-green-600 hover:bg-green-700" : "bg-green-300 cursor-not-allowed"}`}
-                disabled={!validPhone}
+                className={`mt-4 w-full sm:w-80 mx-auto block py-2 rounded-md text-white font-semibold ${(validPhone && otpVerified) ? "bg-green-600 hover:bg-green-700" : "bg-green-300 cursor-not-allowed"}`}
+                disabled={!(validPhone && otpVerified)}
               >
                 Login
               </button>
